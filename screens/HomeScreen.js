@@ -151,91 +151,88 @@ const HomeScreen = ({ navigation, route }) => {
 
   const handleMenuPress = async (item) => {
     console.log('handleMenuPress: Item pressed:', item.title, 'Screen:', item.screen);
-    if (item.screen === 'Attendance') {
-      try {
-        let attendanceData;
-        console.log('handleMenuPress: Fetching attendance data for userType:', user?.userType);
+    
+    // Handle different screens
+    switch(item.screen) {
+      case 'Attendance':
+        try {
+          let attendanceData;
+          console.log('handleMenuPress: Fetching attendance data for userType:', user?.userType);
 
-        if (user?.userType === 'student') {
-          // Student - fetch their own record
-          console.log('handleMenuPress: Fetching student attendance for:', user.username);
-          const response = await axios.get('http://localhost:5000/api/attendance', {
-            userType: 'student',
-            username: user.username,
-          });
-          console.log('handleMenuPress: Student attendance response:', response.data);
-          attendanceData = response.data;
-        } else if (user?.userType === 'teacher') {
-          // Teacher - fetch student and teacher records
-          console.log('handleMenuPress: Fetching teacher attendance records');
-          const response = await axios.get('http://localhost:5000/api/attendance', {
-            userType: 'teacher',
-          });
-          console.log('handleMenuPress: Teacher attendance response:', response.data);
-          attendanceData = response.data;
-        } else if (user?.userType === 'admin') {
-          // Admin - fetch all users
-          console.log('handleMenuPress: Fetching admin attendance records');
-          const response = await axios.get('http://localhost:5000/api/attendance/', {
-            userType: 'admin',
-          });
-          console.log('handleMenuPress: Admin attendance response:', response.data);
-          attendanceData = response.data;
+          if (user?.userType === 'student') {
+            const response = await axios.get('http://localhost:5000/api/attendance', {
+              userType: 'student',
+              username: user.username,
+            });
+            attendanceData = response.data;
+          } else if (user?.userType === 'teacher') {
+            const response = await axios.get('http://localhost:5000/api/attendance', {
+              userType: 'teacher',
+            });
+            attendanceData = response.data;
+          } else if (user?.userType === 'admin') {
+            const response = await axios.get('http://localhost:5000/api/attendance/', {
+              userType: 'admin',
+            });
+            attendanceData = response.data;
+          }
+
+          navigation.navigate(item.screen, { userData: user, attendanceData });
+        } catch (error) {
+          console.error('Error fetching attendance data:', error);
+          Alert.alert('Error', 'Failed to fetch attendance data');
+          navigation.navigate(item.screen, { userData: user });
         }
+        break;
 
-        console.log('handleMenuPress: Navigating to Attendance with data:', { userData: user, attendanceData });
-        navigation.navigate(item.screen, { userData: user, attendanceData });
-      } catch (error) {
-        console.error('handleMenuPress: Error fetching attendance data:', error);
-        Alert.alert('Error', 'Failed to fetch attendance data');
-        // Navigate without data if API fails
-        console.log('handleMenuPress: Navigating to Attendance without data due to error');
-        navigation.navigate(item.screen, { userData: user });
-      }
-    } else if (item.screen === 'Grade') {
-      try {
-        let gradesData;
-        console.log('handleMenuPress: Fetching grades data for userType:', user?.userType);
+      case 'Grade':
+        try {
+          let gradesData;
+          console.log('handleMenuPress: Fetching grades data for userType:', user?.userType);
 
-        if (user?.userType === 'student') {
-          // Student - fetch their own grades
-          console.log('handleMenuPress: Fetching student grades for:', user.username);
-          const response = await axios.get('http://localhost:5000/api/grades', {
-            userType: 'student',
-            username: user.username,
-          });
-          console.log('handleMenuPress: Student grades response:', response.data);
-          gradesData = response.data;
-        } else if (user?.userType === 'teacher') {
-          // Teacher - fetch student grades
-          console.log('handleMenuPress: Fetching teacher grades records');
-          const response = await axios.get('http://localhost:5000/api/grades', {
-            userType: 'teacher',
-          });
-          console.log('handleMenuPress: Teacher grades response:', response.data);
-          gradesData = response.data;
-        } else if (user?.userType === 'admin') {
-          // Admin - fetch all grades
-          console.log('handleMenuPress: Fetching admin grades records');
-          const response = await axios.get('http://localhost:5000/api/grades/', {
-            userType: 'admin',
-          });
-          console.log('handleMenuPress: Admin grades response:', response.data);
-          gradesData = response.data;
+          if (user?.userType === 'student') {
+            const response = await axios.get('http://localhost:5000/api/grades', {
+              userType: 'student',
+              username: user.username,
+            });
+            gradesData = response.data;
+          } else if (user?.userType === 'teacher') {
+            const response = await axios.get('http://localhost:5000/api/grades', {
+              userType: 'teacher',
+            });
+            gradesData = response.data;
+          } else if (user?.userType === 'admin') {
+            const response = await axios.get('http://localhost:5000/api/grades/', {
+              userType: 'admin',
+            });
+            gradesData = response.data;
+          }
+
+          navigation.navigate(item.screen, { userData: user, gradesData });
+        } catch (error) {
+          console.error('Error fetching grades data:', error);
+          Alert.alert('Error', 'Failed to fetch grades data');
+          navigation.navigate(item.screen, { userData: user });
         }
+        break;
 
-        console.log('handleMenuPress: Navigating to Grade with data:', { userData: user, gradesData });
-        navigation.navigate(item.screen, { userData: user, gradesData });
-      } catch (error) {
-        console.error('handleMenuPress: Error fetching grades data:', error);
-        Alert.alert('Error', 'Failed to fetch grades data');
-        // Navigate without data if API fails
-        console.log('handleMenuPress: Navigating to Grade without data due to error');
+      case 'TimeTable':
+      case 'Assignments':
+      case 'Exams':
+      case 'Library':
+      case 'FeePayment':
+      case 'Transport':
+      case 'Messages':
         navigation.navigate(item.screen, { userData: user });
-      }
-    } else {
-      console.log('handleMenuPress: Showing alert for non-Attendance/Grade item:', item.title);
-      Alert.alert(item.title, `Navigate to ${item.title} screen`);
+        break;
+
+      case 'Settings':
+        navigation.navigate(item.screen, { userData: user });
+        break;
+
+      default:
+        console.log('handleMenuPress: Showing alert for:', item.title);
+        Alert.alert(item.title, `Navigate to ${item.title} screen`);
     }
   };
 

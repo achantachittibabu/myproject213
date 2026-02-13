@@ -86,8 +86,7 @@ const GradeScreen = ({ navigation, route }) => {
       console.log('fetchGrades: Making API request to localhost:5000/api/grades');
       const response = await axios.get('http://localhost:5000/api/grades', {
         params: {
-          userType: selectedUserType,
-          grade: selectedGrade,
+          userType: selectedUserType
         },
       });
 
@@ -153,7 +152,7 @@ const GradeScreen = ({ navigation, route }) => {
       console.log('useEffect: Calling fetchGrades');
       fetchGrades();
     }
-  }, [selectedUserType, selectedGrade, canViewFilters, gradesData]);
+  }, [selectedUserType, selectedGrade, canViewFilters]);
 
   const handleViewGrade = (gradeItem) => {
     console.log('handleViewGrade called with:', gradeItem);
