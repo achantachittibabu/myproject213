@@ -6,6 +6,8 @@ import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
 import FailureScreen from './screens/FailureScreen';
 import AttendanceScreen from './screens/AttendanceScreen';
+import GradeScreen from './screens/GradeScreen';
+import GradeEditScreen from './screens/GradeEditScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +51,22 @@ export default function App() {
           name="Attendance" 
           component={AttendanceScreen}
           options={{ title: 'Attendance' }}
+          screenOptions={{
+          headerShown: false, // Hide header for all screens
+        }}
+        />
+        <Stack.Screen 
+          name="Grade" 
+          component={GradeScreen}
+          options={{ title: 'Grades' }}
+          screenOptions={{
+          headerShown: false, // Hide header for all screens
+        }}
+        />
+        <Stack.Screen 
+          name="GradeEdit" 
+          component={GradeEditScreen}
+          options={{ title: 'Grade Details' }}
           screenOptions={{
           headerShown: false, // Hide header for all screens
         }}

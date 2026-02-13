@@ -88,8 +88,8 @@ const HomeScreen = ({ navigation, route }) => {
       id: 4,
       title: 'Grades',
       icon: 'chart-line',
-      color: '#9C27B0',
-      screen: 'Grades',
+      color: '#252425',
+      screen: 'Grade',
     },
     {
       id: 5,
@@ -164,7 +164,7 @@ const HomeScreen = ({ navigation, route }) => {
             username: user.username,
           });
           console.log('handleMenuPress: Student attendance response:', response.data);
-          attendanceData = response.data.data || response.data; // Extract data array from response
+          attendanceData = response.data;
         } else if (user?.userType === 'teacher') {
           // Teacher - fetch student and teacher records
           console.log('handleMenuPress: Fetching teacher attendance records');
@@ -172,7 +172,7 @@ const HomeScreen = ({ navigation, route }) => {
             userType: 'teacher',
           });
           console.log('handleMenuPress: Teacher attendance response:', response.data);
-          attendanceData = response.data.data || response.data; // Extract data array from response
+          attendanceData = response.data;
         } else if (user?.userType === 'admin') {
           // Admin - fetch all users
           console.log('handleMenuPress: Fetching admin attendance records');
@@ -180,7 +180,7 @@ const HomeScreen = ({ navigation, route }) => {
             userType: 'admin',
           });
           console.log('handleMenuPress: Admin attendance response:', response.data);
-          attendanceData = response.data.data || response.data; // Extract data array from response
+          attendanceData = response.data;
         }
 
         console.log('handleMenuPress: Navigating to Attendance with data:', { userData: user, attendanceData });
@@ -192,8 +192,49 @@ const HomeScreen = ({ navigation, route }) => {
         console.log('handleMenuPress: Navigating to Attendance without data due to error');
         navigation.navigate(item.screen, { userData: user });
       }
+    } else if (item.screen === 'Grade') {
+      try {
+        let gradesData;
+        console.log('handleMenuPress: Fetching grades data for userType:', user?.userType);
+
+        if (user?.userType === 'student') {
+          // Student - fetch their own grades
+          console.log('handleMenuPress: Fetching student grades for:', user.username);
+          const response = await axios.get('http://localhost:5000/api/grades', {
+            userType: 'student',
+            username: user.username,
+          });
+          console.log('handleMenuPress: Student grades response:', response.data);
+          gradesData = response.data;
+        } else if (user?.userType === 'teacher') {
+          // Teacher - fetch student grades
+          console.log('handleMenuPress: Fetching teacher grades records');
+          const response = await axios.get('http://localhost:5000/api/grades', {
+            userType: 'teacher',
+          });
+          console.log('handleMenuPress: Teacher grades response:', response.data);
+          gradesData = response.data;
+        } else if (user?.userType === 'admin') {
+          // Admin - fetch all grades
+          console.log('handleMenuPress: Fetching admin grades records');
+          const response = await axios.get('http://localhost:5000/api/grades/', {
+            userType: 'admin',
+          });
+          console.log('handleMenuPress: Admin grades response:', response.data);
+          gradesData = response.data;
+        }
+
+        console.log('handleMenuPress: Navigating to Grade with data:', { userData: user, gradesData });
+        navigation.navigate(item.screen, { userData: user, gradesData });
+      } catch (error) {
+        console.error('handleMenuPress: Error fetching grades data:', error);
+        Alert.alert('Error', 'Failed to fetch grades data');
+        // Navigate without data if API fails
+        console.log('handleMenuPress: Navigating to Grade without data due to error');
+        navigation.navigate(item.screen, { userData: user });
+      }
     } else {
-      console.log('handleMenuPress: Showing alert for non-Attendance item:', item.title);
+      console.log('handleMenuPress: Showing alert for non-Attendance/Grade item:', item.title);
       Alert.alert(item.title, `Navigate to ${item.title} screen`);
     }
   };
