@@ -64,7 +64,7 @@ export default function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
-      const response = await axios.post('http://10.0.2.2:5000/api/students/register', {
+      const response = await axios.post('http://localhost:5000/api/user/register', {
         username: formData.username,
         email: formData.email,
         phone: formData.phone,
@@ -75,7 +75,7 @@ export default function RegisterScreen({ navigation }) {
 
       setLoading(false);
 
-      if (response.status === 200 || response.status === 201) {
+      if (response.status == 200 || response.status == 201 || response.statusText == 'Created') {
         Alert.alert('Success', 'Registration successful! Please login.', [
           {
             text: 'OK',

@@ -12,7 +12,7 @@ import {
 import axios from 'axios';
 
 export default function LoginScreen({ navigation }) {
-  const [userId, setUserId] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [userType, setUserType] = useState('student');
   const [showDropdown, setShowDropdown] = useState(false);
@@ -21,7 +21,7 @@ export default function LoginScreen({ navigation }) {
   const userTypes = ['student', 'teacher', 'admin'];
 
   const handleLogin = async () => {
-    if (!userId || !password) {
+    if (!username || !password) {
       Alert.alert('Validation Error', 'Please enter both User ID and Password');
       return;
     }
@@ -29,17 +29,21 @@ export default function LoginScreen({ navigation }) {
     setLoading(true);
     try {
       const response = await axios.post('http://localhost:5000/api/user/login', {
-        userId,
+        username,
         password,
         userType,
       });
 
       setLoading(false);
-      
+      console.log('Response Status:', response.status);
+      console.log('Response Data:', response.data);
+      console.log('Full Response:', response);
       if (response.status === 200) {
         Alert.alert('Success', 'Login successful!');
         navigation.navigate('Home', { 
-          user: response.data.user || { userId, userType } 
+            userData: {
+        username: username,
+        userType: userType}     
         });
       }
     } catch (error) {
@@ -64,8 +68,8 @@ export default function LoginScreen({ navigation }) {
           <TextInput
             style={styles.input}
             placeholder="Enter your user ID"
-            value={userId}
-            onChangeText={setUserId}
+            value={username}
+            onChangeText={setUsername}
             autoCapitalize="none"
             editable={!loading}
           />
