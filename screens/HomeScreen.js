@@ -157,22 +157,22 @@ const HomeScreen = ({ navigation, route }) => {
       case 'Attendance':
         try {
           let attendanceData;
-          console.log('handleMenuPress: Fetching attendance data for userType:', user?.userType);
+          console.log('handleMenuPress: Fetching attendance data for usertype:', user?.usertype);
 
-          if (user?.userType === 'student') {
+          if (user?.usertype === 'student') {
             const response = await axios.get('http://localhost:5000/api/attendance', {
-              userType: 'student',
+              usertype: 'student',
               username: user.username,
             });
             attendanceData = response.data;
-          } else if (user?.userType === 'teacher') {
+          } else if (user?.usertype === 'teacher') {
             const response = await axios.get('http://localhost:5000/api/attendance', {
-              userType: 'teacher',
+              usertype: 'teacher',
             });
             attendanceData = response.data;
-          } else if (user?.userType === 'admin') {
+          } else if (user?.usertype === 'admin') {
             const response = await axios.get('http://localhost:5000/api/attendance/', {
-              userType: 'admin',
+              usertype: 'admin',
             });
             attendanceData = response.data;
           }
@@ -188,22 +188,22 @@ const HomeScreen = ({ navigation, route }) => {
       case 'Grade':
         try {
           let gradesData;
-          console.log('handleMenuPress: Fetching grades data for userType:', user?.userType);
+          console.log('handleMenuPress: Fetching grades data for usertype:', user?.usertype);
 
-          if (user?.userType === 'student') {
+          if (user?.usertype === 'student') {
             const response = await axios.get('http://localhost:5000/api/grades', {
-              userType: 'student',
+              usertype: 'student',
               username: user.username,
             });
             gradesData = response.data;
-          } else if (user?.userType === 'teacher') {
+          } else if (user?.usertype === 'teacher') {
             const response = await axios.get('http://localhost:5000/api/grades', {
-              userType: 'teacher',
+              usertype: 'teacher',
             });
             gradesData = response.data;
-          } else if (user?.userType === 'admin') {
+          } else if (user?.usertype === 'admin') {
             const response = await axios.get('http://localhost:5000/api/grades/', {
-              userType: 'admin',
+              usertype: 'admin',
             });
             gradesData = response.data;
           }
@@ -253,7 +253,7 @@ const HomeScreen = ({ navigation, route }) => {
               {user?.username || 'Guest'}
             </Title>
             <Paragraph style={styles.userType}>
-              {user?.userType.toUpperCase() || 'STUDENT'}
+              {user?.usertype.toUpperCase() || 'STUDENT'}
             </Paragraph>
             
           </View>
@@ -274,7 +274,7 @@ const HomeScreen = ({ navigation, route }) => {
           <Menu.Item
             onPress={() => {
               setMenuVisible(false);
-              navigation.navigate('Profile');
+              navigation.navigate('Profile', { userData: user });
             }}
             title="View Profile"
             leadingIcon="account"
@@ -282,7 +282,7 @@ const HomeScreen = ({ navigation, route }) => {
           <Menu.Item
             onPress={() => {
               setMenuVisible(false);
-              navigation.navigate('EditProfile');
+              navigation.navigate('ProfileDetails', { userData: user });
             }}
             title="Edit Profile"
             leadingIcon="account-edit"
@@ -290,7 +290,7 @@ const HomeScreen = ({ navigation, route }) => {
           <Divider />
           <Menu.Item
             onPress={() => {
-              setMenuVisible(true);
+              setMenuVisible(false);
               handleLogout();
             }}
             title="Logout"

@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { PaperProvider } from 'react-native-paper';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import HomeScreen from './screens/HomeScreen';
@@ -23,12 +24,15 @@ import TransportDetailScreen from './screens/TransportDetailScreen';
 import MessagesScreen from './screens/MessagesScreen';
 import MessageDetailScreen from './screens/MessageDetailScreen';
 import SettingsScreen from './screens/SettingsScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import ProfileDetailsScreen from './screens/ProfileDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen 
           name="Login" 
@@ -206,7 +210,24 @@ export default function App() {
           headerShown: false,
         }}
         />
+        <Stack.Screen 
+          name="Profile" 
+          component={ProfileScreen}
+          options={{ title: 'Profile' }}
+          screenOptions={{
+          headerShown: false,
+        }}
+        />
+        <Stack.Screen 
+          name="ProfileDetails" 
+          component={ProfileDetailsScreen}
+          options={{ title: 'Profile Details' }}
+          screenOptions={{
+          headerShown: false,
+        }}
+        />
       </Stack.Navigator>
-    </NavigationContainer>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }

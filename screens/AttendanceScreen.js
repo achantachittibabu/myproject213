@@ -164,8 +164,8 @@ const AttendanceScreen = ({ navigation, route }) => {
   const handleViewUser = (userItem) => {
     console.log('handleViewUser called with:', userItem);
     const username = userItem?.username || 'Unknown User';
-    const userid = userItem?.userid || 'N/A';
-    Alert.alert('User Details', `Viewing user: ${username}\nID: ${userid}`);
+    const userType = userItem?.userType || 'N/A';
+    Alert.alert('User Details', `Viewing user: ${username}\nType: ${userType}`);
   };
 
   const renderUserRow = ({ item }) => {

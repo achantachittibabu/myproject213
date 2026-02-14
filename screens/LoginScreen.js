@@ -14,11 +14,11 @@ import axios from 'axios';
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('student');
+  const [usertype, setUsertype] = useState('student');
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const userTypes = ['student', 'teacher', 'admin'];
+  const usertypes = ['student', 'teacher', 'admin'];
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -31,7 +31,7 @@ export default function LoginScreen({ navigation }) {
       const response = await axios.post('http://localhost:5000/api/user/login', {
         username,
         password,
-        userType,
+        usertype,
       });
 
       setLoading(false);
@@ -43,7 +43,9 @@ export default function LoginScreen({ navigation }) {
         navigation.navigate('Home', { 
             userData: {
         username: username,
-        userType: userType}     
+        usertype: usertype,
+        user: response.data,
+      }     
         });
       }
     } catch (error) {
@@ -96,28 +98,28 @@ export default function LoginScreen({ navigation }) {
             onPress={() => setShowDropdown(!showDropdown)}
             disabled={loading}
           >
-            <Text style={styles.dropdownText}>{userType}</Text>
+            <Text style={styles.dropdownText}>{usertype}</Text>
             <Text style={styles.dropdownIcon}>▼</Text>
           </TouchableOpacity>
 
           {showDropdown && (
             <View style={styles.dropdownMenu}>
-              {userTypes.map((type) => (
+              {usertypes.map((type) => (
                 <TouchableOpacity
                   key={type}
                   style={[
                     styles.dropdownItem,
-                    userType === type && styles.dropdownItemActive,
+                    usertype === type && styles.dropdownItemActive,
                   ]}
                   onPress={() => {
-                    setUserType(type);
+                    setUsertype(type);
                     setShowDropdown(false);
                   }}
                 >
                   <Text
                     style={[
                       styles.dropdownItemText,
-                      userType === type && styles.dropdownItemTextActive,
+                      usertype === type && styles.dropdownItemTextActive,
                     ]}
                   >
                     {type.charAt(0).toUpperCase() + type.slice(1)}
